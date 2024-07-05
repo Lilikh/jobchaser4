@@ -26,7 +26,8 @@ const Home = () => {
   }
 
   //filter jobs by title
-  const filterItems=jobs.filter((job)=>job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1)
+  const filterItems=jobs.filter(
+    (job)=>job.jobTitle.toLowerCase().indexOf(query.toLowerCase()) !== -1)
  
   //----------------------------------------- Radio filtering ------------------------------------
 
