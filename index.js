@@ -9,7 +9,7 @@ require('dotenv').config();
 app.use(express.json());
 app.use(cors());
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${encodeURIComponent(process.env.DB_USER)}:${encodeURIComponent(process.env.DB_PASSWORD)}@chas-job.kqazivx.mongodb.net/?retryWrites=true&w=majority&appName=Chas-Job`;
 
 const client = new MongoClient(uri, {
@@ -46,6 +46,25 @@ async function run() {
       const jobs = await jobsCollections.find({}).toArray();
       res.send(jobs);
     });
+
+
+    //get jobs by email
+
+    app.get("/myJobs/:email", async(req,res)=>{
+     /*  console.log(req.params.email); */
+       const jobs= await jobsCollections.find({
+        postedBy : req.params.email}).toArray();
+        res.send(jobs);
+    }) 
+
+    /* Delete a job */
+
+    app.delete("/job/:id", async(req,res)=>{
+      const id=req.params.id;
+      const filter = {_id: new ObjectId(id)}
+      const result=await jobsCollections.deleteOne(filter);
+      res.send(result)
+    })
 
     // Ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
